@@ -32,6 +32,8 @@ public class Main {
                     }
                 }
 
+            } catch (FileNotFoundException e) {
+                System.out.println("Файл не найден");
             }
             catch(IOException e){
                 e.printStackTrace();
@@ -45,9 +47,14 @@ public class Main {
                 String content = new String(Files.readAllBytes(Paths.get(absPath)), Charset.forName("UTF-8"));
                 System.out.println(content);
                 System.out.println();
-            } catch (IOException e) {
+            } catch (FileNotFoundException e) {
+                System.out.println("Файл не найден");
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            System.out.println("Можно открыать только txt файлы!");
         }
     }
     public static void writeInFile (String content) {
@@ -60,6 +67,32 @@ public class Main {
             }
         } else System.out.println("Вы в каталоге, выберите файл");
     }
+    public static void addWriteInFile (String contentNew) {
+        if (fileName.contains(".txt")) {
+            try {
+                String content = new String(Files.readAllBytes(Paths.get(absPath)), Charset.forName("UTF-8"));
+                //System.out.println(content);
+                System.out.println();
+
+                if (absPath != null) {
+                    try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(absPath), "utf-8")) {
+                        out.write(content + contentNew);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else System.out.println("Вы в каталоге, выберите файл");
+
+
+            } catch (FileNotFoundException e) {
+                System.out.println("Файл не найден");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("сюда записать не получится txt файлы!");
+        }
+    }
+
 
     public static void createFile (String name) {
         File file2 = new File(child[0].getParent(),name + ".txt");
@@ -72,12 +105,12 @@ public class Main {
     public static void deleteFile (int num) {
         File fd = child[num];
         fd.delete();
-        try {
-            goBack();
-            goDirectory(num);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println();
-        }
+            try {
+                goBack();
+                goDirectory(num);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println();
+            }
     }
 
     public static void goDirectory (int num) {
@@ -112,6 +145,7 @@ public class Main {
         //deleteFile(2);  //работает
         //createFile("Новый текстовый документ"); // работает
         writeInFile("lalalala"); //Работает
+        addWriteInFile("nenenene"); //checked
 
     }
 }
